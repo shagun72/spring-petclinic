@@ -1,0 +1,21 @@
+pipeline {
+    agent anyone
+    tools {
+        maven 'MAVEN-3.8.9'
+    }
+    stages {
+        stage('GIT') {
+            steps {
+                git url: 'https://github.com/shagun72/spring-petclinic.git' ,
+                    branch: 'main'
+
+            }
+        }
+        stage('BUILD') {
+            steps {
+                sh 'mvn --version'
+                sh 'mvn validate'
+            }
+        }
+    }
+}
