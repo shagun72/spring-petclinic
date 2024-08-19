@@ -1,21 +1,27 @@
 pipeline {
-    agent any
+    agent any 
     tools {
         maven 'MAVEN-3.9.8'
     }
+    triggers {
+        pollSCM ('* * * * *')
+    }
+    parameters{
+        string(name: 'GOALS' ,defaultValue: 'clean package')
+    }
     stages {
-        stage('GIT') {
+        stage ('SCM') {
             steps {
-                git url: 'https://github.com/shagun72/spring-petclinic.git' ,
+                git url: 'https://github.com/shagun72/spring-petclinic.git',
                     branch: 'main'
-
             }
         }
-        stage('BUILD') {
+        stage ('BUILD') {
             steps {
-                sh 'mvn --version'
-                sh 'mvn validate'
+                sh "mvn ${params.GOALS}"
             }
         }
     }
+
+    
 }
